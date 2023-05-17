@@ -4,6 +4,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const mongoString = process.env.DATABASE_URL;
+const routes = require('./routes/routes');
+
 
 //connect the database to our server using Mongoose
 mongoose.connect(mongoString);
@@ -30,4 +32,4 @@ app.listen(3000, () =>(
 ));
 
 
-
+app.use('/api', routes)
