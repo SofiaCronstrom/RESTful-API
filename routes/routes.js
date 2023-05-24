@@ -17,8 +17,9 @@ res.send('Get All API')
 })
 
 //GET BY ID METHOD
+//Get by ID Method
 router.get('/getOne/:id', (req, res) => {
-    res.send('Get by ID API')
+    res.send(req.params.id)
 })
 //UPDATE BY ID METHOD 
 router.patch('/update/:id', (req, res) => {
