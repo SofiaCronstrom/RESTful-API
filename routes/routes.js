@@ -8,14 +8,14 @@ module.exports = router;
 
 //POST METHOD 
 //the data body to post using the model
-router.post('/post', (req, res) => {
+router.post('/post', async (req, res) => {
     const data = new Model({
         name: req.body.name,
         age: req.body.age
     })
 
     try {
-        const dataToSave = data.save();
+        const dataToSave = await data.save();
         res.status(200).json(dataToSave)
     }
     catch (error){
@@ -24,20 +24,51 @@ router.post('/post', (req, res) => {
 })
 
 //GET ALL METHOD
-router.get('/getAll',  (req, res) => {
-res.send('Get All API')
+//getting all data
+router.get('/getAll', async (req, res) => {
+    try {
+       const data = await Model.find();
+       res.json(data)
+    }
+    catch (error){
+        res.status(500).json({message: error.message})
+    }
 })
 
 //GET BY ID METHOD
-//Get by ID Method
-router.get('/getOne/:id', (req, res) => {
-    res.send(req.params.id)
+router.get('/getOne/:id', async (req, res) => {
+    try{
+      const data = await Model.findById(req.params.id);
+      res.json(data)
+    }
+    catch (error){
+        res.status(500).json({message: error.message})
+    }
 })
 //UPDATE BY ID METHOD 
-router.patch('/update/:id', (req, res) => {
-    res.send('Update by ID API')
+router.patch('/update/:id', async (req, res) => {
+    try{
+       const id = req.params.id;
+       const updateData = req.body;
+       const options = { new: true };
+
+       const result = await Model .findByIdAndUpdate(
+        id, updateData, options
+       )
+       res.send(result)
+    }
+    catch(error){
+        res.status(400).json({ message: error.message })  
+    }
 })
 //DELETE BY ID METHOD 
-router.delete('/delete/:id', (req, res) => {
-    res.send('Delete by ID API')
+router.delete('/delete/:id', async (req, res) => {
+    try{
+     const id = req.params.id;
+     const data = await Model.findByIdAndDelete(id)
+     res.send(`Document with ${data.name} has been deleted`)
+    }
+    catch(error){
+        res.status(400).json({ message: error.message }) 
+    }
 })
